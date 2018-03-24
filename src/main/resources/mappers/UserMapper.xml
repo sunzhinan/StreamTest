@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.sun.myl.dao.UserMapper">  
+    <resultMap id="userMap" type="com.sun.myl.entity.User">  
+        <id property="userId" column="USER_ID" jdbcType="VARCHAR"/>  
+        <result property="userPassword" column="USER_PW" jdbcType="VARCHAR"/>  
+        <result property="userName" column="USER_NM" jdbcType="VARCHAR"/> 
+        <result property="userGd" column="USER_GD" jdbcType="VARCHAR"/>  
+        <result property="userAddress" column="USER_ADDRESS" jdbcType="VARCHAR"/>  
+        <result property="schoolId" column="SCHOOL_ID" jdbcType="VARCHAR"/>   
+    </resultMap>  
+    <select id="selectByUserName" resultMap="userMap">  
+        select * from t_szn_user  
+        <where>  
+            <if test="userName!=null">  
+                and USER_NM=#{userName}  
+            </if>  
+        </where>  
+    </select>  
+    <select id="userNameExits" resultType="int">  
+        select count(0) from t_szn_user where USER_NM=#{userName}  
+    </select>  
+    <select id="accountValid" parameterType="com.sun.myl.entity.User" resultType="int">  
+        select count(0) from t_szn_user where USER_NM=#{userName} and USER_PW=#{userPassword}  
+    </select>  
+    <insert id="insert" parameterType="com.sun.myl.entity.User" keyProperty="id">  
+        insert into t_szn_user (USER_ID,USER_NM, USER_PW) values (#{userId},#{userName},#{userPassword})  
+    </insert>  
+</mapper>  
